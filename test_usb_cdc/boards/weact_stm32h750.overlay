@@ -1,0 +1,45 @@
+/* MCUBoot overlay for WeAct STM32H750 board
+ * - Place MCUBoot in internal flash (128KB)
+ * - Define external QSPI slots for Direct-XIP
+ */
+
+/ {
+	/* For MCUBoot itself, link to internal flash */
+	chosen {
+		zephyr,console = &usart3;        		
+		zephyr,shell-uart = &cdc_acm_uart0;
+		zephyr,flash = &flash0;
+		zephyr,code-partition = &boot_partition;		
+	};
+};
+
+/* Internal Flash (128KB) holds MCUBoot */
+&flash0 {
+	partitions {
+		compatible = "fixed-partitions";
+		#address-cells = <1>;
+		#size-cells = <1>;
+
+		boot_partition: partition@0 {
+			label = "mcuboot";
+			reg = <0x00000000 0x00020000>; /* 128KB */
+		};
+	};
+};
+
+&w25q64_qspi {
+	status = "disabled";
+};
+
+&zephyr_udc0 {
+	cdc_acm_uart0: cdc_acm_uart0 {
+		compatible = "zephyr,cdc-acm-uart";
+	};
+};
+
+/* Remove the board's default MCUboot slots from external QSPI */
+/delete-node/ &slot0_partition;
+/delete-node/ &slot1_partition;
+/delete-node/ &scratch_partition;
+
+

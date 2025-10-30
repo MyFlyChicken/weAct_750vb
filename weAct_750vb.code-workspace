@@ -1,0 +1,246 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		// Hush CMake
+		"cmake.configureOnOpen": false,
+		// Use clang-format as the default formatter (workspace-wide and for C/C++)
+		"editor.defaultFormatter": "xaver.clang-format",
+		"[c]": {
+			"editor.defaultFormatter": "xaver.clang-format"
+		},
+		"[cpp]": {
+			"editor.defaultFormatter": "xaver.clang-format"
+		},
+		// File Associations
+		//clangd settings, need to install clangd extension first
+		//"clang-format.executable": "/usr/bin/clang-format",
+		"clang-format.executable": "/home/yyf/zephyrproject/.venv/bin/clang-format",
+		"clangd.path": "/usr/bin/clangd",
+		"clangd.arguments": [
+			"--background-index",
+			"--compile-commands-dir=${workspaceFolder}/build-learn",
+			"-j=12",
+			"--clang-tidy",
+			"--completion-style=detailed",
+			"--pch-storage=disk",
+			"--header-insertion=never"
+		],
+		// Do NOT exclude build folders in Explorer and Search
+		"explorer.excludeGitIgnore": false,
+		"search.useIgnoreFiles": false,
+		"files.exclude": {
+			"**/build": false,
+			"**/build-*": false,
+			"build": false,
+			"build-*": false,
+			"build-learn": false,
+			"build-mcuboot": false
+		},
+		"search.exclude": {
+			"**/build": false,
+			"**/build-*": false,
+			"build": false,
+			"build-*": false,
+			"build-learn": false,
+			"build-mcuboot": false
+		}
+	},
+	"tasks": {
+		"version": "2.0.0",
+		"tasks": [
+			{
+				"label": "west Flash",
+				"type": "shell",
+				"command": "bash",
+				"args": [
+					"-lc",
+					"source ${userHome}/zephyrproject/zephyr/zephyr-env.sh && ${userHome}/zephyrproject/.venv/bin/west flash -d build"
+				],
+				"problemMatcher": []
+			},
+			{
+				"label": "west Flash(jlink)",
+				"type": "shell",
+				"command": "bash",
+				"args": [
+					"-lc",
+					"source ${userHome}/zephyrproject/zephyr/zephyr-env.sh && ${userHome}/zephyrproject/.venv/bin/west flash -r jlink -d build"
+				],
+				"problemMatcher": []
+			},
+			{
+				"label": "west Flash(openocd)",
+				"type": "shell",
+				"command": "bash",
+				"args": [
+					"-lc",
+					"source ${userHome}/zephyrproject/zephyr/zephyr-env.sh && ${userHome}/zephyrproject/.venv/bin/west flash -r openocd -d build"
+				],
+				"problemMatcher": []
+			},
+			{
+				"label": "App Build",
+				"type": "shell",
+				"group": {
+					"kind": "build"
+				},
+				"command": "bash",
+				"args": [
+					"-lc",
+					"source ${userHome}/zephyrproject/zephyr/zephyr-env.sh && ${userHome}/zephyrproject/.venv/bin/west build -p auto -b weact_stm32h750 prj-learn -d build"
+				],
+				"problemMatcher": []
+			},
+			{
+				"label": "MCUBoot Build",
+				"type": "shell",
+				"group": {
+					"kind": "build"
+				},
+				"command": "bash",
+				"args": [
+					"-lc",
+					// DBOARD_ROOT指向的路径是包含boards文件夹的上一级路径，其它工程是通过cmakelist文件，指定BOARD_ROOT识别自定义板的（set(BOARD_ROOT "${CMAKE_CURRENT_LIST_DIR}/..")）
+					"source ${userHome}/zephyrproject/zephyr/zephyr-env.sh && ${userHome}/zephyrproject/.venv/bin/west build -p auto -b weact_stm32h750 ${userHome}/zephyrproject/bootloader/mcuboot/boot/zephyr -d build-mcuboot -- -DBOARD_ROOT=${workspaceFolder} -DOVERLAY_CONFIG=${workspaceFolder}/mcuboot/prj.conf -DDTC_OVERLAY_FILE=${workspaceFolder}/mcuboot/boards/weact_stm32h750.overlay"
+				],
+				"problemMatcher": []
+			},
+			{
+				"label": "test qspi_flash Build",
+				"type": "shell",
+				"group": {
+					"kind": "build"
+				},
+				"command": "bash",
+				"args": [
+					"-lc",
+					"source ${userHome}/zephyrproject/zephyr/zephyr-env.sh && ${userHome}/zephyrproject/.venv/bin/west build -p auto -b weact_stm32h750 test_qspi_flash -d build"
+				],
+				"problemMatcher": []
+			},
+			{
+				"label": "test sdcard_fs Build",
+				"type": "shell",
+				"group": {
+					"kind": "build"
+				},
+				"command": "bash",
+				"args": [
+					"-lc",
+					"source ${userHome}/zephyrproject/zephyr/zephyr-env.sh && ${userHome}/zephyrproject/.venv/bin/west build -p auto -b weact_stm32h750 test_sdcard_fs -d build"
+				],
+				"problemMatcher": []
+			},
+			{
+				"label": "test st7735 Build",
+				"type": "shell",
+				"group": {
+					"kind": "build"
+				},
+				"command": "bash",
+				"args": [
+					"-lc",
+					"source ${userHome}/zephyrproject/zephyr/zephyr-env.sh && ${userHome}/zephyrproject/.venv/bin/west build -p auto -b weact_stm32h750 test_st7735 -d build"
+				],
+				"problemMatcher": []
+			},
+			{
+				"label": "test lvgl Build",
+				"type": "shell",
+				"group": {
+					"kind": "build"
+				},
+				"command": "bash",
+				"args": [
+					"-lc",
+					"source ${userHome}/zephyrproject/zephyr/zephyr-env.sh && ${userHome}/zephyrproject/.venv/bin/west build -p auto -b weact_stm32h750 test_lvgl -d build"
+				],
+				"problemMatcher": []
+			},
+			{
+				"label": "test usb_cdc Build",
+				"type": "shell",
+				"group": {
+					"kind": "build"
+				},
+				"command": "bash",
+				"args": [
+					"-lc",
+					"source ${userHome}/zephyrproject/zephyr/zephyr-env.sh && ${userHome}/zephyrproject/.venv/bin/west build -p auto -b weact_stm32h750 test_usb_cdc -d build"
+				],
+				"problemMatcher": []
+			},
+		],
+		"inputs": [
+			{
+				"id": "board",
+				"type": "promptString",
+				"default": "weAct_stm32h750b",
+				"description": "See https://docs.zephyrproject.org/latest/boards/index.html"
+			},
+			{
+				"id": "pristine",
+				"type": "pickString",
+				"description": "Choose when to run a pristine build",
+				"default": "auto",
+				"options": [
+					"auto",
+					"always",
+					"never"
+				]
+			}
+		]
+	},
+	"launch": {
+		"version": "0.2.0",
+		"configurations": [
+			{
+				"name": "Launch",
+				"device": "STM32H750VB",
+				"cwd": "${workspaceFolder}",
+				"executable": "build-learn/zephyr/zephyr.elf",
+				"request": "launch",
+				"type": "cortex-debug",
+				"runToEntryPoint": "main",
+				"servertype": "openocd",
+				"gdbPath": "${userHome}/.local/zephyr-sdk-0.17.4/arm-zephyr-eabi/bin/arm-zephyr-eabi-gdb",
+				"preLaunchTask": "West Build"
+			},
+			{
+				"name": "Attach (OpenOCD, CMSIS-DAP)",
+				"device": "STM32H750VB",
+				"cwd": "${workspaceFolder}",
+				"executable": "build-learn/zephyr/zephyr.elf",
+				"request": "attach",
+				"type": "cortex-debug",
+				"runToEntryPoint": "main",
+				"servertype": "openocd",
+				"serverpath": "${userHome}/.local/zephyr-sdk-0.17.4/sysroots/x86_64-pokysdk-linux/usr/bin/openocd",
+				"toolchainPrefix": "arm-zephyr-eabi",
+				"configFiles": [
+					"${workspaceFolder}/boards/vendor/weact_stm32h750/support/openocd.cfg"
+				],
+				"armToolchainPath": "${userHome}/.local/zephyr-sdk-0.17.4/arm-zephyr-eabi/bin",
+				"gdbPath": "${userHome}/.local/zephyr-sdk-0.17.4/arm-zephyr-eabi/bin/arm-zephyr-eabi-gdb"
+			},
+		]
+	},
+	"extensions": {
+		"recommendations": [
+			"marus25.cortex-debug",
+			"donjayamanne.python-environment-manager",
+			"llvm-vs-code-extensions.vscode-clangd",
+			"cschlosser.doxdocgen",
+			"xaver.clang-format",
+			"trond-snekvik.gnu-mapfiles",
+			"spmeesseman.vscode-taskexplorer",
+			"ms-vscode.vscode-serial-monitor",
+			"nordic-semiconductor.nrf-devicetree",
+			"nordic-semiconductor.nrf-kconfig",
+		]
+	}
+}
