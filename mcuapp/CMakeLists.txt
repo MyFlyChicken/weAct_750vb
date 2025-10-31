@@ -7,4 +7,4 @@ find_package(Zephyr REQUIRED HINTS $ENV{ZEPHYR_BASE})
 project(prj-learn)
 
 # src/led.c src/button.c
-target_sources(app PRIVATE src/led.c src/button.c)
+target_sources(app PRIVATE src/led.c)

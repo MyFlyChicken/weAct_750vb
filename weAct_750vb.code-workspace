@@ -96,6 +96,19 @@
 				"problemMatcher": []
 			},
 			{
+				"label": "MCUApp Build",
+				"type": "shell",
+				"group": {
+					"kind": "build"
+				},
+				"command": "bash",
+				"args": [
+					"-lc",
+					"source ${userHome}/zephyrproject/zephyr/zephyr-env.sh && ${userHome}/zephyrproject/.venv/bin/west build -p auto -b weact_stm32h750 mcuapp -d build"
+				],
+				"problemMatcher": []
+			},
+			{
 				"label": "MCUBoot Build",
 				"type": "shell",
 				"group": {

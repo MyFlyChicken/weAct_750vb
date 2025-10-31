@@ -16,11 +16,8 @@ CONFIG_UART_CONSOLE=y
 # Enable GPIO
 CONFIG_GPIO=y
 
+# Flash settings
+CONFIG_FLASH_SIZE=128
 
-# If linker still places ROM at 0x08000000,
-# uncomment the two lines below to force ROM to external mapped base (STM32H7 QSPI @ 0x90000000)
-# CONFIG_FLASH_BASE_ADDRESS=0x90000000
-# # in KB (8MB device / adjust to your code partition size)
-# CONFIG_FLASH_SIZE=8192  
-
+CONFIG_XIP=y
 

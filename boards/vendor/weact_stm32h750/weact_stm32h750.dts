@@ -18,11 +18,10 @@
 		zephyr,console = &usart3;
 		zephyr,shell-uart = &usart3;
 		zephyr,sram = &sram0;
-		/* Use external QSPI NOR as default flash and code storage */
-		zephyr,flash = &w25q64_qspi;
+		zephyr,flash = &flash0;
 		zephyr,display = &st7735r_160x80;
 		/* Place application code in external flash partition for XIP */
-		zephyr,code-partition = &slot0_partition;
+		zephyr,code-partition = &boot_partition;
 	};
 
 	leds {
@@ -184,7 +183,8 @@ zephyr_udc0: &usbotg_fs {
 	w25q64_qspi: qspi-nor-flash@0 {
 		compatible = "st,stm32-qspi-nor";
 		reg = <0>;
-		size = <DT_SIZE_M(64)>; /* 64 Mbits */
+		size = <DT_SIZE_M(64)>; /* 64 Mbits */				
+		/* JEDEC id for Winbond W25Q64 (helps some drivers/tests) */		
 		qspi-max-frequency = <40000000>;
 		cs-high-time = <2>; /* >= 50 ns */
 		status = "okay";
@@ -233,7 +233,7 @@ zephyr_udc0: &usbotg_fs {
 		spi-max-frequency = <40000000>;
 		size = <DT_SIZE_M(64)>; /* 64 Mbits */
 		status = "okay";
-		jedec-id = [ef 40 17];
+	jedec-id = [ef 40 17];
 		has-dpd;
 		t-enter-dpd = <3500>;
 		t-exit-dpd = <3500>;

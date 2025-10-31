@@ -11,5 +11,7 @@
 |test_st7735|pass|
 |test_usb_cdc|pass|
 
-
+## 注意事项
+- 烧录程序时，jilnk的RST脚必须与实际的MCU NRST引脚相连接，否则会导致识别不到设备
+ 
 

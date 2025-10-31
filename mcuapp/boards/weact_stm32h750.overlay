@@ -1,0 +1,14 @@
+/* MCUBoot overlay for WeAct STM32H750 board
+ * - Place MCUBoot in internal flash (128KB)
+ * - Define external QSPI slots for Direct-XIP
+ */
+
+/ {
+	/* For MCUBoot itself, link to internal flash */
+	chosen {
+		// !!!zephyr,code-partition指向的分区必须为zephyr,flash下边的.
+		// !!!构建系统总会认为code-partition指向的是zephyr,flash下边的分区，如果两者不匹配会出现意外错误
+		zephyr,flash = &w25q64_qspi;
+		zephyr,code-partition = &slot0_partition;
+	};
+};
